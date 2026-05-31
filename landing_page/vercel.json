@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/waitlist.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}
