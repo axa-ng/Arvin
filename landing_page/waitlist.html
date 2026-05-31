@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arvin — Your academic comeback starts here.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f5f5f5;
+  --text:#141414;
+  --sub:#5a5a5a;
+  --dim:#aaa;
+  --border:#ddd;
+  --surface:#ececec;
+  --surface2:#e3e3e3;
+}
+
+html,body{height:100%;overflow:hidden}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Syne',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* grain */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:.45;
+}
+
+/* ── PAGE SHELL ── */
+#page{
+  width:100vw;height:100vh;
+  display:grid;
+  grid-template-rows:1fr auto;
+  padding:0 48px;
+}
+
+/* ── MAIN: two columns ── */
+#main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  height:100%;
+  gap:0;
+}
+
+/* ── LEFT ── */
+.left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding-right:40px;
+  opacity:0;animation:up .7s .15s ease forwards;
+}
+
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,3.8vw,54px);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:-.03em;
+  color:var(--text);
+  margin-bottom:20px;
+}
+h1 em{font-style:italic;color:var(--sub)}
+
+.body-text{
+  font-size:14px;color:var(--sub);font-weight:400;
+  line-height:1.85;max-width:400px;margin-bottom:38px;
+}
+.body-text strong{color:var(--text);font-weight:600}
+
+.waitlist-btn{
+  display:inline-flex;align-items:center;gap:11px;
+  background:var(--text);color:var(--bg);
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.06em;
+  border:none;border-radius:100px;
+  padding:15px 26px;cursor:pointer;
+  transition:opacity .2s,transform .12s;
+  align-self:flex-start;
+}
+.waitlist-btn:hover{opacity:.85}
+.waitlist-btn:active{transform:scale(.97)}
+.btn-arrow{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+}
+
+.count-row{
+  margin-top:18px;font-size:12px;color:var(--dim);
+  display:flex;align-items:center;gap:9px;font-weight:500;
+}
+.avatars{display:flex}
+.av{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--bg);margin-right:-6px;
+  font-size:8px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;color:#fff;
+}
+
+/* ── RIGHT: typographic display ── */
+.right{
+  display:flex;align-items:center;justify-content:flex-start;
+  opacity:0;animation:up .8s .3s ease forwards;
+  padding-left:0;
+}
+
+.wordmark-display{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  line-height:1;
+  position:relative;
+}
+
+/* "Arvin" — single line, large Playfair italic */
+.wm-ar{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(80px,10vw,148px);
+  font-weight:500;
+  font-style:italic;
+  letter-spacing:-.03em;
+  color:var(--text);
+  line-height:1;
+  display:block;
+  white-space:nowrap;
+}
+
+/* Tagline under the wordmark */
+.wm-tagline{
+  margin-top:10px;
+  font-size:11px;font-weight:500;
+  letter-spacing:.22em;text-transform:lowercase;
+  color:var(--dim);
+  text-align:right;
+}
+
+/* ── FOOTER ── */
+footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0 22px;
+  border-top:1px solid var(--border);
+  font-size:11px;color:var(--dim);font-weight:500;letter-spacing:.04em;
+  opacity:0;animation:up .5s .5s ease forwards;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes up{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── MODAL ── */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(20,20,20,.5);
+  backdrop-filter:blur(7px);
+  z-index:200;display:none;
+  align-items:center;justify-content:center;padding:20px;
+}
+.overlay.open{display:flex}
+
+.modal{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:22px;width:100%;max-width:440px;
+  padding:38px 36px 34px;position:relative;
+  box-shadow:0 28px 70px rgba(0,0,0,.12);
+  animation:modalIn .28s cubic-bezier(.34,1.28,.64,1) forwards;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94) translateY(12px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
+.modal-close{
+  position:absolute;top:16px;right:18px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:50%;width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--sub);cursor:pointer;
+  transition:color .15s,background .15s;line-height:1;
+}
+.modal-close:hover{background:var(--surface2);color:var(--text)}
+
+.modal-wordmark{
+  text-align:center;margin-bottom:22px;
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:400;font-style:italic;
+  letter-spacing:-.02em;color:var(--text);
+}
+
+.modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:400;letter-spacing:-.02em;
+  color:var(--text);margin-bottom:7px;
+  text-align:center;line-height:1.2;
+}
+.modal-title em{font-style:italic;color:var(--sub)}
+
+.modal-sub{
+  font-size:13px;color:var(--sub);
+  text-align:center;margin-bottom:26px;
+  line-height:1.65;font-weight:400;
+}
+
+.modal-field{margin-bottom:6px}
+.modal-label{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--sub);
+  margin-bottom:7px;display:block;
+}
+.modal-input{
+  width:100%;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 15px;color:var(--text);
+  font-size:14px;font-family:'Syne',sans-serif;
+  outline:none;transition:border-color .18s;caret-color:var(--text);
+}
+.modal-input:focus{border-color:#888}
+.modal-input::placeholder{color:var(--dim)}
+.modal-input.err{border-color:#c00}
+
+.field-err{font-size:11px;color:#c00;margin-top:5px;margin-bottom:4px;display:none;letter-spacing:.01em}
+.field-err.show{display:block}
+
+.checks{display:flex;flex-direction:column;gap:11px;margin:18px 0 22px}
+.check-row{display:flex;align-items:flex-start;gap:11px;cursor:pointer;user-select:none}
+.check-box{
+  width:17px;height:17px;flex-shrink:0;
+  border-radius:4px;border:1.5px solid var(--border);
+  background:var(--surface);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,border-color .15s;margin-top:2px;
+}
+.check-row:hover .check-box{border-color:#888}
+.check-row.checked .check-box{background:var(--text);border-color:var(--text)}
+.check-row.checked .check-box::after{
+  content:'';width:4px;height:7px;
+  border:1.5px solid var(--bg);border-top:none;border-left:none;
+  transform:rotate(42deg) translate(-1px,-1px);display:block;
+}
+.check-label{font-size:12px;color:var(--sub);line-height:1.55;font-weight:400}
+.check-label strong{color:var(--text);font-weight:600}
+.check-label a{color:var(--text);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+.terms-err{font-size:11px;color:#c00;margin-top:-14px;margin-bottom:10px;display:none}
+.terms-err.show{display:block}
+
+.modal-submit{
+  width:100%;background:var(--text);color:var(--bg);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.04em;border:none;border-radius:10px;
+  padding:14px;cursor:pointer;transition:opacity .18s,transform .1s;
+}
+.modal-submit:hover{opacity:.85}
+.modal-submit:active{transform:scale(.98)}
+
+.success-state{display:none;flex-direction:column;align-items:center;text-align:center;padding:8px 0}
+.success-state.show{display:flex}
+.success-ring{
+  width:56px;height:56px;border-radius:50%;
+  border:2px solid var(--text);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;
+  animation:popIn .35s cubic-bezier(.34,1.5,.64,1) forwards;
+}
+@keyframes popIn{from{transform:scale(.4)}to{transform:scale(1)}}
+.success-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;letter-spacing:-.02em;color:var(--text);margin-bottom:8px}
+.success-sub{font-size:13px;color:var(--sub);line-height:1.7}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  html,body{overflow:auto}
+  #page{padding:0 24px;height:auto;min-height:100vh;grid-template-rows:1fr auto}
+  #main{grid-template-columns:1fr;padding:50px 0 30px;gap:50px}
+  .left{padding-right:0;align-items:center;text-align:center}
+  .body-text{text-align:center}
+  .waitlist-btn{align-self:center}
+  .count-row{justify-content:center}
+  .right{justify-content:center;padding-left:0}
+  .wm-ar{font-size:18vw}
+  .wm-tagline{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="page">
+  <div id="main">
+
+    <!-- LEFT: content -->
+    <div class="left">
+      <h1>Your academic<br><em>comeback</em><br>starts here.</h1>
+
+      <p class="body-text">
+        Arvin uses your Canvas token to build a <strong>personalised daily study plan</strong> for every course.
+        As you follow it, the AI tracks how far behind you are and <strong>adjusts the plan</strong> to help you
+        catch up — without burning out. When coursework piles up and you don't know where to start,
+        Arvin gives you <strong>clarity on exactly what to work on</strong> and when.
+      </p>
+
+      <button class="waitlist-btn" onclick="openModal()">
+        Lock in your spot
+        <span class="btn-arrow">→</span>
+      </button>
+
+      <div class="count-row">
+        <div class="avatars">
+          <div class="av" style="background:#2a2a2a">A</div>
+          <div class="av" style="background:#444">M</div>
+          <div class="av" style="background:#666">S</div>
+          <div class="av" style="background:#888">J</div>
+        </div>
+        <span>847 students already locked in</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: typographic wordmark -->
+    <div class="right">
+      <div class="wordmark-display">
+        <span class="wm-ar">Arvin</span>
+        <div class="wm-tagline">study smarter.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Arvin</span>
+    <span>Free during beta · Built for students</span>
+    <span>Terms &amp; Privacy</span>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="maybeClose(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div id="formState">
+      <div class="modal-wordmark">Arvin</div>
+
+      <div class="modal-title">Lock in your spot<br><em>before it fills up.</em></div>
+      <div class="modal-sub">Free during beta. Be the first to try Arvin and help shape what it becomes.</div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="emailInput">University Email</label>
+        <input class="modal-input" id="emailInput" type="email" placeholder="you@university.ca" autocomplete="email">
+        <div class="field-err" id="emailErr">Please enter a valid email address.</div>
+      </div>
+
+      <div class="checks">
+        <div class="check-row" id="betaCheck" onclick="toggleCheck('betaCheck')">
+          <div class="check-box"></div>
+          <div class="check-label">
+            <strong>Sign me up as a beta tester.</strong> I want early access to features before launch.
+          </div>
+        </div>
+        <div class="check-row" id="termsCheck" onclick="toggleCheck('termsCheck')">
+          <div class="check-box"></div>
+          <div class="check-label">
+            I agree to the <a href="#" onclick="return false">Terms &amp; Conditions</a> and <a href="#" onclick="return false">Privacy Policy</a>.
+          </div>
+        </div>
+      </div>
+      <div class="terms-err" id="termsErr">You need to agree to the terms to continue.</div>
+
+      <button class="modal-submit" onclick="submitWaitlist()">Secure my spot →</button>
+    </div>
+
+    <div class="success-state" id="successState">
+      <div class="success-ring">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M5 11l4.5 4.5 8-8" stroke="#141414" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="success-title">You're locked in.</div>
+      <div class="success-sub">We'll hit you up when Arvin is ready.<br>Your academic comeback starts now.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openModal(){
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('emailInput')?.focus(),280);
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function maybeClose(e){
+  if(e.target===document.getElementById('overlay')) closeModal();
+}
+function toggleCheck(id){
+  document.getElementById(id).classList.toggle('checked');
+}
+
+let count=847;
+function submitWaitlist(){
+  const email=document.getElementById('emailInput').value.trim();
+  const emailErr=document.getElementById('emailErr');
+  const termsErr=document.getElementById('termsErr');
+  const termsOk=document.getElementById('termsCheck').classList.contains('checked');
+
+  emailErr.classList.remove('show');
+  termsErr.classList.remove('show');
+  document.getElementById('emailInput').classList.remove('err');
+
+  let ok=true;
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    emailErr.classList.add('show');
+    document.getElementById('emailInput').classList.add('err');
+    ok=false;
+  }
+  if(!termsOk){ termsErr.classList.add('show'); ok=false; }
+  if(!ok) return;
+
+  count++;
+  document.getElementById('formState').style.display='none';
+  document.getElementById('successState').classList.add('show');
+  const c=document.querySelector('.count-row span');
+  if(c) c.textContent=`${count.toLocaleString()} students already locked in`;
+}
+
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>
