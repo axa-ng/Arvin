@@ -178,13 +178,6 @@ footer{
 }
 .modal-close:hover{background:var(--surface2);color:var(--text)}
 
-.modal-wordmark{
-  text-align:center;margin-bottom:22px;
-  font-family:'Montserrat',sans-serif;
-  font-size:28px;font-weight:400;font-style:italic;
-  letter-spacing:-.02em;color:var(--text);
-}
-
 .modal-title{
   font-family:'Montserrat',sans-serif;
   font-size:24px;font-weight:400;letter-spacing:-.02em;
@@ -251,6 +244,29 @@ footer{
 .modal-submit:hover{opacity:.85}
 .modal-submit:active{transform:scale(.98)}
 
+.modal{
+  overflow-y:auto;
+  max-height:90vh;
+}
+
+.name-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.modal-select{
+  width:100%;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 15px;color:var(--text);
+  font-size:14px;font-family:'Syne',sans-serif;
+  outline:none;transition:border-color .18s;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  cursor:pointer;
+}
+.modal-select:focus{border-color:#888}
+.modal-select.err{border-color:#c00}
+.modal-select option[value=""]{color:var(--dim)}
+
 .success-state{display:none;flex-direction:column;align-items:center;text-align:center;padding:8px 0}
 .success-state.show{display:flex}
 .success-ring{
@@ -265,7 +281,7 @@ footer{
 .success-sub{font-size:13px;color:var(--sub);line-height:1.7}
 
 /* ── RESPONSIVE ── */
-@media(max-width:1100px){
+@media(max-width:1000px){
   #page {
     padding: 0 clamp(16px, 4vw, 24px);
     height: 100vh;
@@ -320,7 +336,7 @@ footer{
   }
 }
 
-@media (max-width: 1100px) and (max-height: 700px) {
+@media (max-width: 1000px) and (max-height: 700px) {
   .wm-ar { font-size: clamp(44px, 10vw, 72px) }
   #main { gap: 10px; padding-top: 12px; padding-bottom: 8px }
   .body-text { font-size: 12px; line-height: 1.45; margin-bottom: 12px }
@@ -374,15 +390,58 @@ footer{
     <button class="modal-close" onclick="closeModal()">✕</button>
 
     <div id="formState">
-      <div class="modal-wordmark">Arvin</div>
 
       <div class="modal-title">Lock in your spot<br><em>before it fills up.</em></div>
       <div class="modal-sub">Free during beta. Be the first to try Arvin and help shape what it becomes.</div>
 
-      <div class="modal-field">
-        <label class="modal-label" for="emailInput">University Email</label>
-        <input class="modal-input" id="emailInput" type="email" placeholder="you@university.ca" autocomplete="email">
+      <div class="name-row">
+        <div class="modal-field">
+          <label class="modal-label" for="firstNameInput">First Name</label>
+          <input class="modal-input" id="firstNameInput" type="text" autocomplete="given-name">
+          <div class="field-err" id="firstNameErr">Please enter your first name.</div>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="lastNameInput">Last Name</label>
+          <input class="modal-input" id="lastNameInput" type="text" autocomplete="family-name">
+          <div class="field-err" id="lastNameErr">Please enter your last name.</div>
+        </div>
+      </div>
+
+      <div class="modal-field" style="margin-top:6px">
+        <label class="modal-label" for="emailInput">Email</label>
+        <input class="modal-input" id="emailInput" type="email" autocomplete="email">
         <div class="field-err" id="emailErr">Please enter a valid email address.</div>
+      </div>
+
+      <div class="modal-field" style="margin-top:6px">
+        <label class="modal-label" for="universityInput">University</label>
+        <input class="modal-input" id="universityInput" type="text" autocomplete="organization">
+        <div class="field-err" id="universityErr">Please enter your university.</div>
+      </div>
+
+      <div class="name-row" style="margin-top:6px">
+        <div class="modal-field">
+          <label class="modal-label" for="yearSelect">Year</label>
+          <select class="modal-select" id="yearSelect">
+            <option value="">Select year</option>
+            <option value="1">1st year</option>
+            <option value="2">2nd year</option>
+            <option value="3">3rd year</option>
+            <option value="4">4th year</option>
+            <option value="5">5th year</option>
+          </select>
+          <div class="field-err" id="yearErr">Please select your year.</div>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="degreeSelect">Degree</label>
+          <select class="modal-select" id="degreeSelect">
+            <option value="">Select degree</option>
+            <option value="bachelor">Bachelor's</option>
+            <option value="masters">Master's</option>
+            <option value="phd">PhD</option>
+          </select>
+          <div class="field-err" id="degreeErr">Please select your degree.</div>
+        </div>
       </div>
 
       <div class="checks">
