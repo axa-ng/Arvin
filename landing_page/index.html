@@ -494,22 +494,30 @@ function toggleCheck(id){
 }
 
 function submitWaitlist(){
+  const firstName=document.getElementById('firstNameInput').value.trim();
+  const lastName=document.getElementById('lastNameInput').value.trim();
   const email=document.getElementById('emailInput').value.trim();
-  const emailErr=document.getElementById('emailErr');
-  const termsErr=document.getElementById('termsErr');
+  const university=document.getElementById('universityInput').value.trim();
+  const year=document.getElementById('yearSelect').value;
+  const degree=document.getElementById('degreeSelect').value;
   const termsOk=document.getElementById('termsCheck').classList.contains('checked');
 
-  emailErr.classList.remove('show');
-  termsErr.classList.remove('show');
-  document.getElementById('emailInput').classList.remove('err');
+  // clear errors
+  ['firstNameErr','lastNameErr','emailErr','universityErr','yearErr','degreeErr','termsErr'].forEach(id=>{
+    document.getElementById(id).classList.remove('show');
+  });
+  ['firstNameInput','lastNameInput','emailInput','universityInput','yearSelect','degreeSelect'].forEach(id=>{
+    document.getElementById(id).classList.remove('err');
+  });
 
   let ok=true;
-  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    emailErr.classList.add('show');
-    document.getElementById('emailInput').classList.add('err');
-    ok=false;
-  }
-  if(!termsOk){ termsErr.classList.add('show'); ok=false; }
+  if(!firstName){ document.getElementById('firstNameErr').classList.add('show'); document.getElementById('firstNameInput').classList.add('err'); ok=false; }
+  if(!lastName){ document.getElementById('lastNameErr').classList.add('show'); document.getElementById('lastNameInput').classList.add('err'); ok=false; }
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ document.getElementById('emailErr').classList.add('show'); document.getElementById('emailInput').classList.add('err'); ok=false; }
+  if(!university){ document.getElementById('universityErr').classList.add('show'); document.getElementById('universityInput').classList.add('err'); ok=false; }
+  if(!year){ document.getElementById('yearErr').classList.add('show'); document.getElementById('yearSelect').classList.add('err'); ok=false; }
+  if(!degree){ document.getElementById('degreeErr').classList.add('show'); document.getElementById('degreeSelect').classList.add('err'); ok=false; }
+  if(!termsOk){ document.getElementById('termsErr').classList.add('show'); ok=false; }
   if(!ok) return;
 
   document.getElementById('formState').style.display='none';
