@@ -493,7 +493,7 @@ function toggleCheck(id){
   document.getElementById(id).classList.toggle('checked');
 }
 
-function submitWaitlist(){
+async function submitWaitlist(){
   const firstName=document.getElementById('firstNameInput').value.trim();
   const lastName=document.getElementById('lastNameInput').value.trim();
   const email=document.getElementById('emailInput').value.trim();
@@ -502,7 +502,6 @@ function submitWaitlist(){
   const degree=document.getElementById('degreeSelect').value;
   const termsOk=document.getElementById('termsCheck').classList.contains('checked');
 
-  // clear errors
   ['firstNameErr','lastNameErr','emailErr','universityErr','yearErr','degreeErr','termsErr'].forEach(id=>{
     document.getElementById(id).classList.remove('show');
   });
@@ -520,8 +519,27 @@ function submitWaitlist(){
   if(!termsOk){ document.getElementById('termsErr').classList.add('show'); ok=false; }
   if(!ok) return;
 
-  document.getElementById('formState').style.display='none';
-  document.getElementById('successState').classList.add('show');
+  const btn=document.querySelector('.modal-submit');
+  btn.disabled=true;
+  btn.textContent='Securing your spot...';
+
+  try {
+    const res=await fetch('/api/waitlist',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        firstName,lastName,email,university,year,degree,
+        betaTester:document.getElementById('betaCheck').classList.contains('checked')
+      })
+    });
+    if(!res.ok) throw new Error();
+    document.getElementById('formState').style.display='none';
+    document.getElementById('successState').classList.add('show');
+  } catch(e){
+    btn.disabled=false;
+    btn.textContent='Secure my spot →';
+    alert('Something went wrong — please try again.');
+  }
 }
 
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
