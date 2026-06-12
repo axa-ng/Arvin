@@ -28,9 +28,14 @@ export default async function handler(req, res) {
         <div style="font-family:sans-serif;max-width:480px;margin:auto;padding:40px 24px;color:#141414">
           <h1 style="font-size:28px;font-weight:700;margin-bottom:8px">You're locked in, ${firstName}.</h1>
           <p style="color:#5a5a5a;line-height:1.7;margin-bottom:24px">
-            Thanks for signing up for Arvin. We'll reach out as soon as beta opens —
-            you'll be among the first to try it.
+            Thanks for signing up for Arvin.
           </p>
+            ${betaTester ? `
+            <p style="color:#5a5a5a;line-height:1.7;margin-bottom:24px">
+                You've also signed up as a <strong style="color:#141414">beta tester</strong> — 
+                we'll contact you before launch to get you in early and help shape what Arvin becomes.
+            </p>
+            ` : ''}
           <p style="color:#5a5a5a;line-height:1.7">Your academic comeback starts now.</p>
           <p style="margin-top:32px;font-size:12px;color:#aaa">— The Arvin team</p>
         </div>
