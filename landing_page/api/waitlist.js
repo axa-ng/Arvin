@@ -21,9 +21,9 @@ export default async function handler(req, res) {
 
   try {
     await resend.emails.send({
-      from: 'Arvin <hello@yourdomain.com>',
+      from: 'Alex <admin@studywitharvin.com>',
       to: email,
-      subject: "You're on the list.",
+      subject: "You're on the list",
       html: `
         <div style="font-family:sans-serif;max-width:480px;margin:auto;padding:40px 24px;color:#141414">
           <h1 style="font-size:28px;font-weight:700;margin-bottom:8px">You're locked in, ${firstName}.</h1>
